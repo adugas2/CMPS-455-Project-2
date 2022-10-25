@@ -77,6 +77,9 @@ public class MyThreadMatrix extends Thread{
                     e.printStackTrace();
                 }
                 arbitrator(id, domain, request, action);
+                for (int j = 0; j < r.nextInt(5) + 3; j++) {
+                    MyThreadMatrix.yield();
+                }
                 mutex[request].release();
             }else{
             //Domain Switch request
