@@ -80,15 +80,18 @@ public class Main {
         }
         System.out.println();
 
-        //setting up semaphores
+        //setting up semaphores and objects
         Semaphore[] mutex = new Semaphore[numObjects];
+        for (int i = 0; i < mutex.length; i++)
+            mutex[i] = new Semaphore(1);
         Semaphore[] wrt = new Semaphore[numObjects];
+        String[] objects = new String[numObjects];
+        Arrays.fill(objects, new String("null"));
 
         //setting up and starting threads
-        MyThreadMatrix[] threads = new MyThreadMatrix[numDomains];
-        int domain;
+        Thread[] threads = new Thread[numDomains];
         for (int i = 0; i < threads.length; i++) {
-            threads[i] = new MyThreadMatrix(i, i, numDomains, numObjects, matrix, mutex, wrt);
+            threads[i] = new MyThreadMatrix(i, numDomains, numObjects, i, matrix, mutex, wrt, objects);
         }
         for (int i = 0; i < threads.length; i++){
             threads[i].start();
