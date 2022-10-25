@@ -78,7 +78,21 @@ public class Main {
             System.out.println(Arrays.toString(row));
             domaincount++;
         }
-        
+        System.out.println();
+
+        //setting up semaphores
+        Semaphore[] mutex = new Semaphore[numObjects];
+        Semaphore[] wrt = new Semaphore[numObjects];
+
+        //setting up and starting threads
+        MyThreadMatrix[] threads = new MyThreadMatrix[numDomains];
+        int domain;
+        for (int i = 0; i < threads.length; i++) {
+            threads[i] = new MyThreadMatrix(i, i, numDomains, numObjects, matrix, mutex, wrt);
+        }
+        for (int i = 0; i < threads.length; i++){
+            threads[i].start();
+        }
     }
 
 }
