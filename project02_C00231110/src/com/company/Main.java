@@ -12,6 +12,7 @@ public class Main {
     }
 
     public static void Task1(){
+        System.out.println("Access control scheme: Access Matrix");
         //initializing variables
         Random r = new Random();
         // this is N
@@ -25,6 +26,7 @@ public class Main {
         //creating and populating access matrix
         int access;
         String [][] matrix = new String [numDomains][numDomains + numObjects];
+        //populating permissions for objects
         for (int i = 0; i < numDomains; i++){
             for (int j = 0; j < numObjects; j++){
                 access = r.nextInt(4);
@@ -44,6 +46,7 @@ public class Main {
                 }
             }
         }
+        //populating permissions for domain switching
         for (int i = 0; i < numDomains; i++){
             for (int j = numObjects; j < numDomains + numObjects; j++){
                 access = r.nextInt(2);
@@ -57,13 +60,25 @@ public class Main {
                 }
             }
         }
-        int count = 1;
-        for (String[] row : matrix) {
-            System.out.print("D" + count + ": ");
-            System.out.println(Arrays.toString(row));
-            count++;
-        }
 
+        //printing matrix
+        System.out.println();
+        System.out.print("     ");
+        for(int i = 0; i < numDomains + numObjects; i++){
+            if (i < numObjects) {
+                System.out.print(" F" +(i+1)+ "  ");
+            } else {
+                System.out.print(" D" + (i - numObjects + 1) + "    ");
+            }
+        }
+        System.out.println();
+        int domaincount = 1;
+        for (String[] row : matrix) {
+            System.out.print("D" + domaincount + ": ");
+            System.out.println(Arrays.toString(row));
+            domaincount++;
+        }
+        
     }
 
 }
