@@ -8,7 +8,55 @@ import java.util.concurrent.Semaphore;
 public class Main {
 
     public static void main(String[] args) {
-        Task2();
+
+        int task = 0;
+
+        while (true) {
+            Scanner in = new Scanner(System.in);
+            int loopControl = 0;
+            //System.out.println(args[0]);
+            //System.out.println(args[1]);
+            //System.out.println(args[2]);
+
+            try {
+                if (args[0].contains("-S 1")) {
+                    task = 1;
+                } else if (args[0].contains("-S 2")) {
+                    task = 2;
+                } else if (args[0].contains("-S 3")) {
+                    task = 3;
+                }
+            }
+            catch (NumberFormatException ex) {}
+
+            if (task == 1 || task == 2 || task == 3){
+                loopControl = 1;
+            }
+
+            if (loopControl == 1) {
+                break;
+            } else {
+                System.out.println("Invalid Input");
+            }
+
+            System.out.println("Enter Task you would like to run (1-3): ");
+            args[0] = "-S " + in.nextLine();
+        }
+
+        switch (task){
+            case 1:
+                System.out.println("task1: ");
+                Task1();
+                break;
+            case 2:
+                System.out.println("task2: ");
+                Task2();
+                break;
+            case 3:
+                System.out.println("task3: ");
+                //Task3();
+                break;
+        }
     }
 
     public static void Task1(){
