@@ -127,11 +127,11 @@ public class Main {
                         permission = "   ";
                         break;
                     case(1):
-                        permission = "R  ";
+                        permission = "R";
                         objectList[j] = objectList[j].concat("D" + String.valueOf(domain) +":" + permission + ", ");
                         break;
                     case(2):
-                        permission = "W  ";
+                        permission = "W";
                         objectList[j] = objectList[j].concat("D" + String.valueOf(domain) +":" + permission + ", ");
                         break;
                     case(3):
