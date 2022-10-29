@@ -8,7 +8,7 @@ import java.util.concurrent.Semaphore;
 public class Main {
 
     public static void main(String[] args) {
-        Task1();
+        Task2();
     }
 
     public static void Task1(){
@@ -97,5 +97,88 @@ public class Main {
             threads[i].start();
         }
     }
+    public static void Task2() {
 
+        System.out.println("Access control scheme: Access List");
+        //initializing variables
+        Random r = new Random();
+        // this is N
+        int numDomains = r.nextInt(5) + 3;
+        System.out.println("Domain Count: " + numDomains);
+
+        //This is M
+        int numObjects = r.nextInt(5) + 3;
+        System.out.println("Object Count: " + numObjects);
+
+        int access;
+        String[] objectList = new String[numObjects + numDomains];
+        for (int i = 0; i < objectList.length; i++){
+            objectList[i] = "";
+        }
+
+        for (int i = 0; i < numDomains; i++) {
+            for (int j = 0; j < numObjects; j++) {
+                access = r.nextInt(4);
+                int domain = i+1;
+
+                String permission = "";
+                switch (access) {
+                    case(0):
+                        permission = "   ";
+                        break;
+                    case(1):
+                        permission = "R  ";
+                        objectList[j] = objectList[j].concat("D" + String.valueOf(domain) +":" + permission + ", ");
+                        break;
+                    case(2):
+                        permission = "W  ";
+                        objectList[j] = objectList[j].concat("D" + String.valueOf(domain) +":" + permission + ", ");
+                        break;
+                    case(3):
+                        permission = "R/W";
+                        objectList[j] = objectList[j].concat("D" + String.valueOf(domain) +":" + permission + ", ");
+                        break;
+                }
+            }
+        }
+
+        for (int i = 0; i < numDomains; i++) {
+            for (int j = numObjects; j < numDomains + numObjects; j++) {
+                access = r.nextInt(2);
+                if (j == i + numObjects) {
+                    access = 0;
+                }
+                if (access == 0) {
+                    //objectList[j] = objectList[j].concat("D" + (i+1) +":" + "     " + ", ");
+                }
+                else {
+                    objectList[j] = objectList[j].concat("D" + (i+1) +":" + "allow" + ", ");
+                }
+            }
+        }
+
+        System.out.println();
+        for (int k = 0; k < numDomains + numObjects; k++) {
+            if (k < numObjects) {
+                System.out.println("F" + (k+1) + "--> " +objectList[k]);
+            } else {
+                System.out.println("D" + (k-numObjects+2) + "--> " +objectList[k]);
+            }
+        }
+
+        System.out.println();
+
+        Semaphore[] mutex = new Semaphore[numObjects];
+        for (int i = 0; i < mutex.length; i++) {
+            mutex[i] = new Semaphore(1);
+        }
+
+        Thread[] threads = new Thread[numDomains];
+        for (int i = 0; i < threads.length; i++) {
+            threads[i] = new MyThreadACL(i, numDomains, numObjects, i, objectList, mutex, objectList);
+        }
+        for (int i = 0; i < threads.length; i++) {
+            threads[i].start();
+        }
+    }
 }
