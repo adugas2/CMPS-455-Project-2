@@ -54,7 +54,7 @@ public class Main {
                 break;
             case 3:
                 System.out.println("task3: ");
-                //Task3();
+                Task3();
                 break;
         }
     }
@@ -226,6 +226,79 @@ public class Main {
             threads[i] = new MyThreadACL(i, numDomains, numObjects, i, objectList, mutex, objectList);
         }
         for (int i = 0; i < threads.length; i++) {
+            threads[i].start();
+        }
+    }
+    public static void Task3(){
+        System.out.println("Access control scheme: Capability List");
+        Random r = new Random();
+
+        int numDomains = r.nextInt(5) + 3;
+        System.out.println("Domain Count: " + numDomains);
+
+        int numObjects = r.nextInt(5) + 3;
+        System.out.println("Object Count: " + numObjects);
+
+        int access;
+        String [] domainList = new String [numDomains];
+        for (int i = 0; i < domainList.length; i++) {
+            domainList[i] = "";
+        }
+
+        for (int i = 0; i < numObjects; i++){
+            for (int j = 0; j < domainList.length; j++){
+                access = r.nextInt(4);
+                int object = i + 1;
+                String permission = "";
+                switch (access) {
+                    case(0):
+                        permission = "";
+                        break;
+                    case(1):
+                        permission = "R";
+                        domainList[j] = domainList[j].concat("F" + String.valueOf(object) + ":" + permission + ", ");
+                        break;
+                    case(2):
+                        permission = "W";
+                        domainList[j] = domainList[j].concat("F" + String.valueOf(object) + ":" + permission + ", ");
+                        break;
+                    case(3):
+                        permission = "R/W";
+                        domainList[j] = domainList[j].concat("F" + String.valueOf(object) + ":" + permission + ", ");
+                        break;
+                }
+            }
+        }
+
+        for (int i = 0; i < numDomains; i++){
+            for (int j = 0; j < domainList.length; j++){
+                access = r.nextInt(2);
+                if (j == i+numObjects){
+                    access = 0;
+                }
+                if (access == 0){
+                    //domainList[j] = "     ";
+                } else {
+                    domainList[j] = domainList[j].concat("D" + (i + 1) + ":" + "allow" + ", ");
+                }
+            }
+        }
+
+        System.out.println();
+        for (int i = 0; i < numDomains; i++) {
+                System.out.println("D" + (i + 1) + "--> " + domainList[i]);
+        }
+        System.out.println();
+
+        Semaphore[] mutex = new Semaphore[numObjects];
+        for (int i = 0; i < mutex.length; i++)
+            mutex[i] = new Semaphore(1);
+
+        Thread[] threads = new Thread[numDomains];
+        for (int i = 0; i < threads.length; i++) {
+            threads[i] = new MyThreadCL(i, numDomains, numObjects, i, domainList, mutex, domainList);
+        }
+        for (int i = 0; i < threads.length; i++){
             threads[i].start();
         }
     }
